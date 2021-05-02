@@ -1,48 +1,94 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 
 namespace Sushi.User
 {
     class Registration
     {
-        public string CurrentName { get; set; }
-        public string CurrentPass { get; set; }
-        public string CurrentMail { get; set; }
-        public void NewUser()
+        private static List<RegistrationProp> _users = new List<RegistrationProp>();
+        public string CheckCurrentName(string userName)
         {
-            Console.WriteLine("");
-            CurrentName = Console.ReadLine();
-            Console.WriteLine("");
-            CurrentPass = Console.ReadLine();
+            JsonSerializer dez = new JsonSerializer();
+            using (StreamReader streamReader = new StreamReader(@"D:\C#\Project\Sushi\User\users.json"))
+            using (JsonReader reader = new JsonTextReader(streamReader))
+            {
+                RegistrationProp reg = dez.Deserialize<RegistrationProp>(reader);
+                dez.Deserialize<RegistrationProp>(reader);
+                if (reg.CurrentName == userName) return reg.CurrentName;
+                else return userName;
+            }
+        }
+        public string CheckCurrenPass(string userName, string userPass)
+        {
+            JsonSerializer dez = new JsonSerializer();
+            using (StreamReader streamReader = new StreamReader(@"D:\C#\Project\Sushi\User\users.json"))
+            using (JsonReader reader = new JsonTextReader(streamReader))
+            {
+                RegistrationProp reg = dez.Deserialize<RegistrationProp>(reader);
+                dez.Deserialize<RegistrationProp>(reader);
+                if (reg.CurrentName == userName)
+                {
+                    if (reg.CurrentPass == userPass) return reg.CurrentPass;
+                    else return null;
+                }
+                return userName;
+            }
+        }
+        public List<RegistrationProp> Create(RegistrationProp registration)
+        {
+            _users.Add(registration);
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            using (StreamWriter streamWriter = new StreamWriter(@"D:\C#\Project\Sushi\User\users.json"))
+            using (JsonWriter writer = new JsonTextWriter(streamWriter))
+            {
+                jsonSerializer.Serialize(writer, _users);
+            }
+            return _users;
+        }
+        public void NewUserRegistration()
+        {
+            RegistrationProp registration = new RegistrationProp();
+            Console.WriteLine("Введите логин:");
+            registration.CurrentName = Console.ReadLine();
+            // Добавить логику на пароль
+            Console.WriteLine("Введите пароль:");
+            registration.CurrentPass = Console.ReadLine();
             bool goodMail = true;
             while (goodMail)
             {
                 Console.WriteLine("Введите email для связи");
-                CurrentMail = Console.ReadLine();
-                if (CurrentMail == null) Console.WriteLine("Введите email");
-                char[] arr = CurrentMail.ToCharArray();
+                registration.CurrentMail = Console.ReadLine();
+                if (registration.CurrentMail == null) Console.WriteLine("Введите email");
+                char[] arr = registration.CurrentMail.ToCharArray();
                 foreach (char item in arr)
                 {
                     if (item == '@') goodMail = false;
-                    else Console.WriteLine("Введен некоректрный email!");
+                    //   else Console.WriteLine("Введен некоректрный email!");
                 }
             }
             Console.WriteLine("");
-            CurrentPass = Console.ReadLine();
+            Create(registration);
+            Console.WriteLine("Аккаунт успешно зарегестрирован.");
+            JoinAccaunt();
         }
-        //public static void UserName()
-        //{
-        //    Dictionary<string, string> users = new Dictionary<string, string>();
-        //    string currentName;
-        //    string currentPass;
-        //    currentName = Console.ReadLine();
-        //    currentPass = Console.ReadLine();
-        //    if (users.Keys.Contains(currentName))
-        //    {
-        //        Console.WriteLine("Извините, но данное имя занято, выберите другое.");
-        //    }
-        //    else users.Add(currentName, currentPass);
-        //}
+        public void JoinAccaunt()
+        {
+            Console.WriteLine("Введите логин:");
+            string login = Console.ReadLine();
+            string pass = null;
+            CheckCurrentName(login);
+            RegistrationProp registrationProp = new RegistrationProp();
+            if (login == registrationProp.CurrentName)
+            {
+                Console.WriteLine("Введите пароль:");
+                while (pass == null)
+                {
+                    pass = Console.ReadLine();
+                    CheckCurrenPass(login, pass);
+                }
+            }
+        }
     }
 }

@@ -12,9 +12,10 @@ namespace Sushi
             Sushi.BL.Greating hello = new BL.Greating();
             hello.GoodPartOfDay(hours);
             #endregion
-            Console.WriteLine("У вас уже имеется аккаунт или желаете зарегистрироваться?");
             #region Registration
-            Sushi.User.Registration registration = new User.Registration();
+            Console.WriteLine("У вас уже имеется аккаунт или желаете зарегистрироваться?");
+            Sushi.User.Registration newUser = new User.Registration();
+            newUser.NewUserRegistration();
             
             #endregion
         }
