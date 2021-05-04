@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sushi.BL.Sushi;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,12 +29,18 @@ namespace Sushi.User
         }
         public List<RegistrationProp> Create(RegistrationProp registration)
         {
-            _users.Add(registration);
-            JsonSerializer jsonSerializer = new JsonSerializer();
-            using (StreamWriter streamWriter = new StreamWriter(@"D:\C#\Project\Sushi\User\users.json"))
-            using (JsonWriter writer = new JsonTextWriter(streamWriter))
+            using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
             {
-                jsonSerializer.Serialize(writer, _users);
+                JsonSerializer serializer = new JsonSerializer();
+                List<RegistrationProp> registrationProp2 = (List<RegistrationProp>)serializer
+                    .Deserialize(file, typeof(List<RegistrationProp>));
+                _users.AddRange(registrationProp2);
+            }
+            _users.Add(registration);
+            using (StreamWriter file = File.CreateText(@"D:\C#\Project\Sushi\User\users.json"))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(file, _users);
             }
             return _users;
         }
@@ -58,9 +65,12 @@ namespace Sushi.User
                             where n.CurrentName.Contains(registration.CurrentName)
                             select n.CurrentName;
                         var result = registrationProp.FirstOrDefault();
-                        resultChecName = result.CurrentName.ToString();
+                        if (result.CurrentName != registration.CurrentName)
+                            resultChecName = result.CurrentName.ToString();
+                        else Console.WriteLine("К сожалению данный логин занят. Придумайте другой!");
                     }
                 }
+                if (resultChecName != null) goodName = false;
             }
             Console.WriteLine("Введите пароль:");
             registration.CurrentPass = Console.ReadLine();
@@ -80,21 +90,44 @@ namespace Sushi.User
         }
         public void JoinAccaunt()
         {
+            string login = null;
+            string loginInJson = null;
             string email = null;
             while (email == null)
             {
                 Console.WriteLine("Введите логин:");
-                string login = Console.ReadLine();
-                Console.WriteLine("Введите пароль:");
-                string pass = Console.ReadLine();
-                CheckCurrentName(login, pass, ref email);
-                if (email == null)
+                login = Console.ReadLine();
+                if (loginInJson == null)
                 {
-                    Console.WriteLine("Вы ввдели неверные данные!");
+                    using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        List<RegistrationProp> registrationProp = (List<RegistrationProp>)serializer
+                            .Deserialize(file, typeof(List<RegistrationProp>));
+                        var checkName =
+                            from n in registrationProp
+                            where n.CurrentName.Contains(login)
+                            select n.CurrentName;
+                        var result = registrationProp.FirstOrDefault();
+                        loginInJson = result.CurrentName.ToString();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Введите пароль:");
+                    string pass = Console.ReadLine();
+                    CheckCurrentName(login, pass, ref email);
+                    if (email == null)
+                    {
+                        Console.WriteLine("Вы ввдели неверные данные!");
+                    }
                 }
             }
             Program program = new Program();
             program.EMail = email;
+            AdminRoot adminRights = new AdminRoot();
+            Byer_sRights byer_SRights = new Byer_sRights();
+            if (login == "admin") adminRights.Logic();
         }
     }
 }
