@@ -9,6 +9,6 @@ namespace Sushi.BL.Sushi
         [JsonProperty("NumberOfRolls")]
         public int NumberOfRolls { get; set; }
         [JsonProperty("Price")]
-        public int Price { get; set; }
+        public double Price { get; set; }
     }
 }
