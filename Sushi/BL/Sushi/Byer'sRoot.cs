@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Sushi.BL.Logger;
+using Sushi.User;
 
 namespace Sushi.BL.Sushi
 {
@@ -63,11 +64,12 @@ namespace Sushi.BL.Sushi
                     logger.Info("Create file order", br.GetType().ToString());
                 }
                 Program program = new Program();
-                Console.WriteLine("Благодарим за заказ");
                 if (program.EMail != null)
                 {
                     sendMail.SendEmailDefault();
                 }
+                Address address = new Address();
+                address.AddAddressForCourier(allPrise);
             }
         }
     }
