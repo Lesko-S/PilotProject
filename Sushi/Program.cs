@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sushi.BL.Sushi;
+using System;
 
 namespace Sushi
 {
@@ -22,6 +23,7 @@ namespace Sushi
             Sushi.User.Registration newUser = new User.Registration();
             string choice = Console.ReadLine();
             int choiceInt = Convert.ToInt32(choice);
+            Byer_sRights byer_SRights = new Byer_sRights();
             switch (choiceInt)
             {
                 case 1:
@@ -31,7 +33,7 @@ namespace Sushi
                     newUser.JoinAccaunt();
                     break;
                 case 3:
-                    // logic
+                    byer_SRights.Logic();
                     break;
                 default:
                     break;
