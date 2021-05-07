@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Sushi.BL.Sushi;
+using Sushi.Extention;
+using Sushi.Property;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +14,7 @@ namespace Sushi.User
         private static List<RegistrationProp> _users = new List<RegistrationProp>();
         public string CheckCurrentName(string userName, string userPass, ref string email)
         {
-            using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
+            using (StreamReader file = File.OpenText(Constant.WayToUser))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 List<RegistrationProp> registrationProp2 = (List<RegistrationProp>)serializer
@@ -29,7 +31,7 @@ namespace Sushi.User
         }
         public List<RegistrationProp> Create(RegistrationProp registration)
         {
-            using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
+            using (StreamReader file = File.OpenText(Constant.WayToUser))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 List<RegistrationProp> registrationProp2 = (List<RegistrationProp>)serializer
@@ -37,7 +39,7 @@ namespace Sushi.User
                 _users.AddRange(registrationProp2);
             }
             _users.Add(registration);
-            using (StreamWriter file = File.CreateText(@"D:\C#\Project\Sushi\User\users.json"))
+            using (StreamWriter file = File.CreateText(Constant.WayToUser))
             {
                 JsonSerializer jsonSerializer = new JsonSerializer();
                 jsonSerializer.Serialize(file, _users);
@@ -55,7 +57,7 @@ namespace Sushi.User
                 registration.CurrentName = Console.ReadLine();
                 if (resultChecName == null)
                 {
-                    using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
+                    using (StreamReader file = File.OpenText(Constant.WayToUser))
                     {
                         JsonSerializer serializer = new JsonSerializer();
                         List<RegistrationProp> registrationProp = (List<RegistrationProp>)serializer
@@ -80,7 +82,7 @@ namespace Sushi.User
                 Console.WriteLine("Введите email для связи");
                 registration.CurrentMail = Console.ReadLine();
                 if (registration.CurrentMail == null) Console.WriteLine("Введите email");
-                if (registration.CurrentMail.Contains('@')) goodMail = false;
+                if (registration.CurrentMail.CharCount('@') == 1) goodMail = false;
                 else Console.WriteLine("Введен некоректрный email!");
             }
             Console.WriteLine("");
@@ -93,13 +95,14 @@ namespace Sushi.User
             string login = null;
             string loginInJson = null;
             string email = null;
+            string pass = null;
             while (email == null)
             {
-                Console.WriteLine("Введите логин:");
-                login = Console.ReadLine();
                 if (loginInJson == null)
                 {
-                    using (StreamReader file = File.OpenText(@"D:\C#\Project\Sushi\User\users.json"))
+                    Console.WriteLine("Введите логин:");
+                    login = Console.ReadLine();
+                    using (StreamReader file = File.OpenText(Constant.WayToUser))
                     {
                         JsonSerializer serializer = new JsonSerializer();
                         List<RegistrationProp> registrationProp = (List<RegistrationProp>)serializer
@@ -115,7 +118,7 @@ namespace Sushi.User
                 else
                 {
                     Console.WriteLine("Введите пароль:");
-                    string pass = Console.ReadLine();
+                    pass = Console.ReadLine();
                     CheckCurrentName(login, pass, ref email);
                     if (email == null)
                     {
@@ -127,7 +130,8 @@ namespace Sushi.User
             program.EMail = email;
             AdminRoot adminRights = new AdminRoot();
             Byer_sRights byer_SRights = new Byer_sRights();
-            if (login == "admin") adminRights.Logic();
+            if (login == "admin" && pass == "admin") adminRights.Logic();
+            else byer_SRights.Logic();
         }
     }
 }
