@@ -1,4 +1,5 @@
-﻿using Sushi.BL.Sushi.Repository;
+﻿using Sushi.BL.Logger;
+using Sushi.BL.Sushi.Repository;
 using System;
 
 namespace Sushi.BL.Sushi
@@ -9,6 +10,8 @@ namespace Sushi.BL.Sushi
         {
             SushiProp sushiProp = new SushiProp();
             SushiRepository sushi = new SushiRepository();
+            AdminRoot ar = new AdminRoot();
+            MyLogger logger = new MyLogger();
             int userChoice = 5;
             Console.WriteLine("Вы зашли под правами администратора!!!");
             while (userChoice != 0)
@@ -33,22 +36,25 @@ namespace Sushi.BL.Sushi
                         Console.WriteLine("Введите цену на новые суши");
                         sushiProp.Price = Convert.ToDouble(Console.ReadLine());
                         sushi.Create(sushiProp);
+                        logger.Info("Create new sushi by Admin", ar.GetType().ToString());
                         break;
                     case 2:
                         Console.WriteLine("Введите название суши которые хотите удалить:");
                         sushiProp.SushiName = Console.ReadLine();
                         sushi.Delete(sushiProp.SushiName);
+                        logger.Info("Delete sushi by Admin", ar.GetType().ToString());
                         break;
                     case 3:
                         Console.WriteLine("Введите название суши которые хотите изменить:");
                         sushiProp.SushiName = Console.ReadLine();
                         sushi.Update(sushiProp.SushiName);
+                        logger.Info("Update sushi by Admin", ar.GetType().ToString());
                         break;
                     default:
                         userChoice = 0;
+                        logger.Info("Admin clos app", ar.GetType().ToString());
                         break;
                 }
-// указать относительный путь
             }
         }
     }

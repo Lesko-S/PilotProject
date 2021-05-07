@@ -3,7 +3,7 @@ using Sushi.Property;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using Sushi.BL.Logger;
 
 namespace Sushi.BL.Sushi
 {
@@ -12,11 +12,14 @@ namespace Sushi.BL.Sushi
         private static IList<SushiProp> _sushiProps = new List<SushiProp>();
         internal void Logic()
         {
+            Byer_sRights br = new Byer_sRights();
+            MyLogger logger = new MyLogger();
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 List<SushiProp> sushiProps = (List<SushiProp>)serializer
                     .Deserialize(file, typeof(List<SushiProp>));
+                logger.Info("Add sushi from file", br.GetType().ToString());
                 int userChoice = 1000;
                 int counter = 0;
                 Console.WriteLine("Какие суши желаете?");
@@ -35,11 +38,11 @@ namespace Sushi.BL.Sushi
                     int.TryParse(Console.ReadLine(), out userChoice);
                     try
                     {
-                        _sushiProps.Add(sushiProps[userChoice]);
+                        _sushiProps.Add(sushiProps[userChoice--]);
                     }
                     catch (Exception)
                     {
-                        // log
+                        logger.Error("User choise more quantity sushi", br.GetType().ToString());
                         throw;
                     }
                     Console.WriteLine("Желаете еще что-нибудь?");
@@ -57,6 +60,7 @@ namespace Sushi.BL.Sushi
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(fileOrder, _sushiProps);
+                    logger.Info("Create file order", br.GetType().ToString());
                 }
                 Program program = new Program();
                 Console.WriteLine("Благодарим за заказ");
