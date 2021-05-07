@@ -36,15 +36,9 @@ namespace Sushi.User
                 JsonSerializer serializer = new JsonSerializer();
                 List<RegistrationProp> registrationProp2 = (List<RegistrationProp>)serializer
                     .Deserialize(file, typeof(List<RegistrationProp>));
-                _users.AddRange(registrationProp2);
+                registrationProp2.Add(registration);
+                return registrationProp2;
             }
-            _users.Add(registration);
-            using (StreamWriter file = File.CreateText(Constant.WayToUser))
-            {
-                JsonSerializer jsonSerializer = new JsonSerializer();
-                jsonSerializer.Serialize(file, _users);
-            }
-            return _users;
         }
         public void NewUserRegistration()
         {

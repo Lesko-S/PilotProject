@@ -39,7 +39,7 @@ namespace Sushi.BL.Sushi
                     int.TryParse(Console.ReadLine(), out userChoice);
                     try
                     {
-                        _sushiProps.Add(sushiProps[userChoice--]);
+                        _sushiProps.Add(sushiProps[userChoice-1]);
                     }
                     catch (Exception)
                     {
