@@ -6,6 +6,7 @@ namespace Sushi.BL.Sushi
 {
     class AdminRoot
     {
+        static object locker = new object();
         internal void Logic()
         {
             SushiProp sushiProp = new SushiProp();
@@ -25,6 +26,8 @@ namespace Sushi.BL.Sushi
                 switch (userChoice)
                 {
                     case 1:
+                        lock (sushiProp)
+                        {
                         Console.WriteLine("Введите название новых суши:");
                         sushiProp.SushiName = Console.ReadLine();
                         Console.WriteLine("Введите описание новых суши:");
@@ -37,22 +40,32 @@ namespace Sushi.BL.Sushi
                         sushiProp.Price = Convert.ToDouble(Console.ReadLine());
                         sushi.Create(sushiProp);
                         logger.Info("Create new sushi by Admin", ar.GetType().ToString());
+                        }
                         break;
                     case 2:
-                        Console.WriteLine("Введите название суши которые хотите удалить:");
-                        sushiProp.SushiName = Console.ReadLine();
-                        sushi.Delete(sushiProp.SushiName);
-                        logger.Info("Delete sushi by Admin", ar.GetType().ToString());
+                        lock (sushiProp)
+                        {
+                            Console.WriteLine("Введите название суши которые хотите удалить:");
+                            sushiProp.SushiName = Console.ReadLine();
+                            sushi.Delete(sushiProp.SushiName);
+                            logger.Info("Delete sushi by Admin", ar.GetType().ToString());
+                        }
                         break;
                     case 3:
-                        Console.WriteLine("Введите название суши которые хотите изменить:");
-                        sushiProp.SushiName = Console.ReadLine();
-                        sushi.Update(sushiProp.SushiName);
-                        logger.Info("Update sushi by Admin", ar.GetType().ToString());
+                        lock (sushiProp)
+                        {
+                            Console.WriteLine("Введите название суши которые хотите изменить:");
+                            sushiProp.SushiName = Console.ReadLine();
+                            sushi.Update(sushiProp.SushiName);
+                            logger.Info("Update sushi by Admin", ar.GetType().ToString());
+                        }
                         break;
                     default:
-                        userChoice = 0;
-                        logger.Info("Admin clos app", ar.GetType().ToString());
+                        lock (sushiProp)
+                        {
+                            userChoice = 0;
+                            logger.Info("Admin clos app", ar.GetType().ToString());
+                        }
                         break;
                 }
             }

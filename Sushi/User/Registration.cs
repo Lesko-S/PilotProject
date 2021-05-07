@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sushi.BL.Sushi;
+using Sushi.Extention;
 using Sushi.Property;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace Sushi.User
                 Console.WriteLine("Введите email для связи");
                 registration.CurrentMail = Console.ReadLine();
                 if (registration.CurrentMail == null) Console.WriteLine("Введите email");
-                if (registration.CurrentMail.Contains('@')) goodMail = false;
+                if (registration.CurrentMail.CharCount('@') == 1) goodMail = false;
                 else Console.WriteLine("Введен некоректрный email!");
             }
             Console.WriteLine("");
