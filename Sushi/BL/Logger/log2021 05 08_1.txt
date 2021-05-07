@@ -1,1 +1,0 @@
-00:08:09	INFO [Sushi.BL.Sushi.Byer_sRights]: Add sushi from file

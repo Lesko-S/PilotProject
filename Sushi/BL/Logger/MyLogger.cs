@@ -23,7 +23,7 @@ namespace Sushi.BL.Logger
         {
             StreamWriter sw;
             FileInfo log_file = new FileInfo(@"D:\C#\Project\Sushi\BL\Logger\log" + DateTime.Now.ToString("yyyy MM dd") + "_" + counter + ".txt");
-            log_file.Create();
+            log_file.Create().Close();
             long fileByteSize = log_file.Length;
             if (fileByteSize >= 30720)
                 File.Move(@"D:\C#\Project\Sushi\BL\Logger\log" + DateTime.Now.ToString("yyyy MM dd") + "_" + counter + ".txt",
@@ -36,7 +36,7 @@ namespace Sushi.BL.Logger
         {
             StreamWriter sw;
             FileInfo log_file = new FileInfo(@"D:\C#\Project\Sushi\BL\Logger\log" + DateTime.Now.ToString("yyyy MM dd") + "_" + counter + ".txt");
-            log_file.Create();
+            log_file.Create().Close();
             long fileByteSize = log_file.Length;
             if (fileByteSize >= 30720)
                 File.Move(@"Sushi\BL\Logger\log" + DateTime.Now.ToString("yyyy MM dd") + "_" + counter + ".txt",
