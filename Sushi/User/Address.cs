@@ -23,14 +23,14 @@ namespace Sushi.User
             order.House = Console.ReadLine();
             Console.WriteLine("Укажите квартиру (Если это офисное здание или частный дом нажмите Enter для продолжения)");
             order.Apartment = Console.ReadLine();
-            Console.WriteLine("Укажите номер телефона для связи в формате +375(__) ___ __ __");
+            Console.WriteLine("Укажите номер телефона для связи в формате +375_________");
             order.Number = Console.ReadLine();
             Console.WriteLine("Данные будут переданы курьеру, с вами свяжутся");
             Console.WriteLine("Благодарим за заказ. До новых встреч!");
             order.Prise = prise;
            
             _order.Add(order);
-            using (StreamWriter fileOrder = File.CreateText(@"Sushi\OrderToCourier"+_counter+".txt"))
+            using (StreamWriter fileOrder = File.CreateText(@"OrderToCourier"+_counter+".txt"))
             {
                 JsonSerializer jsonSerializer = new JsonSerializer();
                 jsonSerializer.Serialize(fileOrder, _order);

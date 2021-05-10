@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Sushi.BL.Logger;
 using Sushi.Property;
+using Sushi.User;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Sushi.BL.Logger;
-using Sushi.User;
 
 namespace Sushi.BL.Sushi
 {
@@ -39,7 +39,7 @@ namespace Sushi.BL.Sushi
                     int.TryParse(Console.ReadLine(), out userChoice);
                     try
                     {
-                        _sushiProps.Add(sushiProps[userChoice-1]);
+                        if (userChoice != 0) _sushiProps.Add(sushiProps[userChoice - 1]);
                     }
                     catch (Exception)
                     {
@@ -57,7 +57,7 @@ namespace Sushi.BL.Sushi
                 }
                 Console.WriteLine($@"Общая стоимость составит: {allPrise}p.");
                 SendMail sendMail = new SendMail();
-                using (StreamWriter fileOrder = File.CreateText(@"Sushi\BL\Sushi\Repository\Order.txt"))
+                using (StreamWriter fileOrder = File.CreateText(@"Order.txt"))
                 {
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(fileOrder, _sushiProps);
