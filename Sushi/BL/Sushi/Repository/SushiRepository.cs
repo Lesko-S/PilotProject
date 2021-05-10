@@ -12,34 +12,49 @@ namespace Sushi.BL.Sushi.Repository
         private static List<SushiProp> _sushiProps = new List<SushiProp>();
         public List<SushiProp> Create(SushiProp sushiProp)
         {
+            _sushiProps.Add(sushiProp);
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                List<SushiProp> sushiProps = (List<SushiProp>)serializer
+                List<SushiProp> sP2 = (List<SushiProp>)serializer
                     .Deserialize(file, typeof(List<SushiProp>));
-                sushiProps.AddRange(sushiProps);
+                _sushiProps.AddRange(sP2);
+            }
+            using (StreamWriter file = File.CreateText(Constant.WayToSushi))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(file, _sushiProps);
             }
             return _sushiProps;
+            _sushiProps.Clear();
         }
         public SushiProp Delete(string name)
         {
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                List<SushiProp> sushiProps = (List<SushiProp>)serializer
+                List<SushiProp> sP2 = (List<SushiProp>)serializer
                     .Deserialize(file, typeof(List<SushiProp>));
+                _sushiProps.AddRange(sP2);
                 var item = _sushiProps.FirstOrDefault(x => x.SushiName == name);
-                sushiProps.Remove(item);
+                _sushiProps.Remove(item);
                 return item;
             }
+            using (StreamWriter file = File.CreateText(Constant.WayToSushi))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(file, _sushiProps);
+            }
+            _sushiProps.Clear();
         }
         public SushiProp Update(string name)
         {
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                List<SushiProp> sushiProps = (List<SushiProp>)serializer
+                List<SushiProp> sP2 = (List<SushiProp>)serializer
                     .Deserialize(file, typeof(List<SushiProp>));
+                _sushiProps.AddRange(sP2);
                 var item = _sushiProps.FirstOrDefault(x => x.SushiName == name);
                 int userChoice = 6;
                 while (userChoice != 0)
@@ -78,10 +93,15 @@ namespace Sushi.BL.Sushi.Repository
                             userChoice = 0;
                             break;
                     }
-
                 }
                 return item;
             }
+            using (StreamWriter file = File.CreateText(Constant.WayToSushi))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(file, _sushiProps);
+            }
+            _sushiProps.Clear();
         }
     }
 }
