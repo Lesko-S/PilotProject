@@ -12,6 +12,7 @@ namespace Sushi.BL.Sushi.Repository
         private static List<SushiProp> _sushiProps = new List<SushiProp>();
         public List<SushiProp> Create(SushiProp sushiProp)
         {
+            _sushiProps.Clear();
             _sushiProps.Add(sushiProp);
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
@@ -26,29 +27,29 @@ namespace Sushi.BL.Sushi.Repository
                 jsonSerializer.Serialize(file, _sushiProps);
             }
             return _sushiProps;
-            _sushiProps.Clear();
         }
         public SushiProp Delete(string name)
         {
+            _sushiProps.Clear();
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 List<SushiProp> sP2 = (List<SushiProp>)serializer
                     .Deserialize(file, typeof(List<SushiProp>));
                 _sushiProps.AddRange(sP2);
-                var item = _sushiProps.FirstOrDefault(x => x.SushiName == name);
-                _sushiProps.Remove(item);
-                return item;
             }
+            var item = _sushiProps.FirstOrDefault(x => x.SushiName == name);
+            _sushiProps.Remove(item);
             using (StreamWriter file = File.CreateText(Constant.WayToSushi))
             {
                 JsonSerializer jsonSerializer = new JsonSerializer();
                 jsonSerializer.Serialize(file, _sushiProps);
             }
-            _sushiProps.Clear();
+            return null;
         }
         public SushiProp Update(string name)
         {
+            _sushiProps.Clear();
             using (StreamReader file = File.OpenText(Constant.WayToSushi))
             {
                 JsonSerializer serializer = new JsonSerializer();
@@ -101,7 +102,6 @@ namespace Sushi.BL.Sushi.Repository
                 JsonSerializer jsonSerializer = new JsonSerializer();
                 jsonSerializer.Serialize(file, _sushiProps);
             }
-            _sushiProps.Clear();
         }
     }
 }

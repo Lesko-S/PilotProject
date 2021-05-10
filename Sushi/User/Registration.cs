@@ -31,6 +31,7 @@ namespace Sushi.User
         }
         public List<RegistrationProp> Create(RegistrationProp registration)
         {
+            _users.Clear();
             _users.Add(registration);
             using (StreamReader file = File.OpenText(Constant.WayToUser))
             {
@@ -45,7 +46,6 @@ namespace Sushi.User
                 jsonSerializer.Serialize(file, _users);
             }
             return _users;
-            _users.Clear();
         }
         public void NewUserRegistration()
         {
@@ -63,11 +63,7 @@ namespace Sushi.User
                         JsonSerializer serializer = new JsonSerializer();
                         List<RegistrationProp> registrationProp = (List<RegistrationProp>)serializer
                             .Deserialize(file, typeof(List<RegistrationProp>));
-                        var checkName =
-                            from n in registrationProp
-                            where n.CurrentName.Contains(registration.CurrentName)
-                            select n.CurrentName;
-                        var result = registrationProp.FirstOrDefault();
+                        var result = registrationProp.FirstOrDefault(n => n.CurrentName == registration.CurrentName);
                         if (result.CurrentName != registration.CurrentName)
                             resultChecName = result.CurrentName.ToString();
                         else Console.WriteLine("К сожалению данный логин занят. Придумайте другой!");
