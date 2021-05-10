@@ -31,14 +31,21 @@ namespace Sushi.User
         }
         public List<RegistrationProp> Create(RegistrationProp registration)
         {
+            _users.Add(registration);
             using (StreamReader file = File.OpenText(Constant.WayToUser))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                List<RegistrationProp> registrationProp2 = (List<RegistrationProp>)serializer
+                List<RegistrationProp> rP2 = (List<RegistrationProp>)serializer
                     .Deserialize(file, typeof(List<RegistrationProp>));
-                registrationProp2.Add(registration);
-                return registrationProp2;
+                _users.AddRange(rP2);
             }
+            using (StreamWriter file = File.CreateText(Constant.WayToUser))
+            {
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(file, _users);
+            }
+            return _users;
+            _users.Clear();
         }
         public void NewUserRegistration()
         {
