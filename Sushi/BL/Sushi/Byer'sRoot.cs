@@ -11,7 +11,7 @@ namespace Sushi.BL.Sushi
     class Byer_sRights
     {
         private static IList<SushiProp> _sushiProps = new List<SushiProp>();
-        internal void Logic()
+        internal void Logic(string email)
         {
             Byer_sRights br = new Byer_sRights();
             MyLogger logger = new MyLogger();
@@ -64,9 +64,11 @@ namespace Sushi.BL.Sushi
                     logger.Info("Create file order", br.GetType().ToString());
                 }
                 Program program = new Program();
-                if (program.EMail != null)
+                if (email != null)
                 {
-                    sendMail.SendEmailDefault();
+                    Console.WriteLine("Для зарегестрированных пользователей у нас дополнительная скидка 5%!");
+                    allPrise = allPrise*0.95;
+                    sendMail.SendEmailDefault(email);
                 }
                 Address address = new Address();
                 address.AddAddressForCourier(allPrise);

@@ -64,9 +64,9 @@ namespace Sushi.User
                         List<RegistrationProp> registrationProp = (List<RegistrationProp>)serializer
                             .Deserialize(file, typeof(List<RegistrationProp>));
                         var result = registrationProp.FirstOrDefault(n => n.CurrentName == registration.CurrentName);
-                        if (result.CurrentName != registration.CurrentName)
-                            resultChecName = result.CurrentName.ToString();
-                        else Console.WriteLine("К сожалению данный логин занят. Придумайте другой!");
+                            if (result == null || result.CurrentName != registration.CurrentName)
+                                resultChecName = registration.CurrentName.ToString();
+                            else Console.WriteLine("К сожалению данный логин занят. Придумайте другой!");
                     }
                 }
                 if (resultChecName != null) goodName = false;
@@ -123,12 +123,10 @@ namespace Sushi.User
                     }
                 }
             }
-            Program program = new Program();
-            program.EMail = email;
             AdminRoot adminRights = new AdminRoot();
             Byer_sRights byer_SRights = new Byer_sRights();
             if (login == "admin" && pass == "admin") adminRights.Logic();
-            else byer_SRights.Logic();
+            else byer_SRights.Logic(email);
         }
     }
 }
