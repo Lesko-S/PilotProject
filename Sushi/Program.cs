@@ -33,7 +33,7 @@ namespace Sushi
                     newUser.JoinAccaunt();
                     break;
                 case 3:
-                    byer_SRights.Logic();
+                    byer_SRights.Logic(null);
                     break;
                 default:
                     break;
