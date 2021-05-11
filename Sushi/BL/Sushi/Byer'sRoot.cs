@@ -55,7 +55,7 @@ namespace Sushi.BL.Sushi
                     Console.WriteLine(item.SushiName);
                     allPrise += item.Price;
                 }
-                Console.WriteLine($@"Общая стоимость составит: {allPrise}p.");
+                Console.WriteLine($@"Общая стоимость составит: {allPrise}к.");
                 SendMail sendMail = new SendMail();
                 using (StreamWriter fileOrder = File.CreateText(@"Order.txt"))
                 {
@@ -67,8 +67,9 @@ namespace Sushi.BL.Sushi
                 if (email != null)
                 {
                     Console.WriteLine("Для зарегестрированных пользователей у нас дополнительная скидка 5%!");
-                    allPrise = allPrise*0.95;
+                    allPrise = Math.Round(allPrise*0.95, 2);
                     sendMail.SendEmailDefault(email);
+                    Console.WriteLine($@"Общая стоимость c учетом скидки составит: {allPrise}к.");
                 }
                 Address address = new Address();
                 address.AddAddressForCourier(allPrise);
