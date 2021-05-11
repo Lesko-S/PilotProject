@@ -28,7 +28,7 @@ namespace Sushi.BL.Sushi.Repository
             }
             return _sushiProps;
         }
-        public SushiProp Delete(string name)
+        public  SushiProp Delete(string name)
         {
             _sushiProps.Clear();
             using (StreamReader file = File.OpenText(Constant.WayToSushi))

@@ -7,7 +7,7 @@ namespace Sushi.BL
 {
     class SendMail
     {
-        public void SendEmailDefault(string email)
+        public async void SendEmailDefault(string email)
         {
             try
             {
@@ -16,13 +16,13 @@ namespace Sushi.BL
                 mailMessage.From = new MailAddress("SushiBot", "Cуши бот");
                 mailMessage.To.Add(email);
                 mailMessage.Subject = "Сообщение от суши бота";
-                mailMessage.Attachments.Add(new Attachment(@"Sushi\BL\Sushi\Repository\Order.txt"));
+                mailMessage.Attachments.Add(new Attachment(@"D:\C#\Project\Sushi\BL\Sushi\Repository\Order.txt"));
                 using (SmtpClient client = new SmtpClient("smtp.gmail.com"))
                 {
                     client.Credentials = new NetworkCredential("zaglyshka@gmail.com", "pass");
                     client.Port = 587;
                     client.EnableSsl = true;
-                    client.Send(mailMessage);
+                    await client.SendMailAsync(mailMessage);
                     Console.WriteLine(@$"на ваш email {email} выслано письмо с вашим заказом");
 
                 }
@@ -34,7 +34,7 @@ namespace Sushi.BL
                 Console.WriteLine($"Возникла небольшая ошибка: {ex.Message}");
                 log.Error("User choise more quantity sushi", sM.GetType().ToString());
             }
-            
+
         }
     }
 }

@@ -82,8 +82,8 @@ namespace Sushi.User
                 if (registration.CurrentMail.CharCount('@') == 1) goodMail = false;
                 else Console.WriteLine("Введен некоректрный email!");
             }
-            Console.WriteLine("");
             Create(registration);
+            registration.Dispose();
             Console.WriteLine("Аккаунт успешно зарегестрирован.");
             JoinAccaunt();
         }
