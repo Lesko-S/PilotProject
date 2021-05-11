@@ -5,7 +5,6 @@ namespace Sushi
 {
     class Program
     {
-        public string EMail { get; set; }
         static void Main(string[] args)
         {
             #region Greating
