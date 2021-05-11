@@ -1,3 +1,2 @@
-# PilotProject
-IT-Academy
+# PilotProject in IT-Academy
 SushiBot in console
