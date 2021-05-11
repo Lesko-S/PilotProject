@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sushi.BL;
 using Sushi.BL.Sushi;
 using Sushi.Extention;
 using Sushi.Property;
@@ -84,6 +85,8 @@ namespace Sushi.User
             }
             Create(registration);
             registration.Dispose();
+            SendMail sendMail = new SendMail();
+            sendMail.SendEmailDefault($"Благодарим Вас за регистрацию!\nВаш логин: {registration.CurrentName}\nВаш пароль: {registration.CurrentPass}");
             Console.WriteLine("Аккаунт успешно зарегестрирован.");
             JoinAccaunt();
         }

@@ -10,6 +10,7 @@ namespace Sushi.BL.Sushi
 {
     class Byer_sRights
     {
+        public string EMail { get; set; }
         private static IList<SushiProp> _sushiProps = new List<SushiProp>();
         internal void Logic(string email)
         {
@@ -57,18 +58,18 @@ namespace Sushi.BL.Sushi
                 }
                 Console.WriteLine($@"Общая стоимость составит: {allPrise}к.");
                 SendMail sendMail = new SendMail();
-                using (StreamWriter fileOrder = File.CreateText(@"Order.txt"))
-                {
-                    JsonSerializer jsonSerializer = new JsonSerializer();
-                    jsonSerializer.Serialize(fileOrder, _sushiProps);
-                    logger.Info("Create file order", br.GetType().ToString());
-                }
-                Program program = new Program();
+                //using (StreamWriter fileOrder = File.CreateText(@"Order.txt"))
+                //{
+                //    JsonSerializer jsonSerializer = new JsonSerializer();
+                //    jsonSerializer.Serialize(fileOrder, _sushiProps);
+                //    logger.Info("Create file order", br.GetType().ToString());
+                //}
+                EMail = email;
                 if (email != null)
                 {
                     Console.WriteLine("Для зарегестрированных пользователей у нас дополнительная скидка 5%!");
                     allPrise = Math.Round(allPrise*0.95, 2);
-                    sendMail.SendEmailDefault(email);
+                    sendMail.SendEmailDefault("Ваш заказ принят");
                     Console.WriteLine($@"Общая стоимость c учетом скидки составит: {allPrise}к.");
                 }
                 Address address = new Address();

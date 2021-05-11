@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sushi.BL;
 using Sushi.BL.Logger;
 using Sushi.Property;
 using System;
@@ -28,7 +29,8 @@ namespace Sushi.User
             Console.WriteLine("Данные будут переданы курьеру, с вами свяжутся");
             Console.WriteLine("Благодарим за заказ. До новых встреч!");
             order.Prise = prise;
-           
+            SendMail sendMail = new SendMail();
+            sendMail.SendEmailDefault($"Ваш заказ №{_counter} передан курьеру");
             _order.Add(order);
             using (StreamWriter fileOrder = File.CreateText(@"OrderToCourier"+_counter+".txt"))
             {
